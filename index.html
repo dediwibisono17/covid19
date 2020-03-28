@@ -23,11 +23,13 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
+		var proxy = 'https://cors-anywhere.herokuapp.com/';
+		var url = 'https://api.kawalcovid19.id/case/summary';
 		$.ajax({
-			url: 'https://api.kawalcovid19.id/case/summary',
+			url: proxy + url,
 			type: 'GET',
 			dataType: 'jsonp',
-			success: function(response) {
+			complete: function(response) {
 				var timee = response.metadata.lastUpdatedAt;
 				var a = timee.substr(0,10);
 				var tanggal = a.substr(8,9);
