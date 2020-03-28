@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Update Covid 19</title>
+	<link rel="stylesheet" href="css/materialize.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<div class="container">
+		<h1 class="center-align">Data Covid-19 Terbaru</h1>
+		<div id="waktu"></div>
+		<div id="data"></div>
+		<p>Untuk informasi selengkapnya bisa cek di <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a></p>
+		<div class="sumber">
+			Sumber: 
+			<a href="https://api.kawalcovid19.id/case/summary" target="_blank">
+				<i>https://api.kawalcovid19.id/case/summary</i>
+			</a>
+		</div>
+	</div>
+	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="js/materialize.min.js"></script>
+	<script>
+		$.ajax({
+			url: 'https://api.kawalcovid19.id/case/summary',
+			type: 'GET',
+			success: function(response) {
+				var timee = response.metadata.lastUpdatedAt;
+				var a = timee.substr(0,10);
+				var tanggal = a.substr(8,9);
+				var bulan = a.substr(5,2);
+				var tahun = a.substr(0,4);
+
+				var monthWording = {
+						'01':'Januari',
+						'02':'Februari',
+						'03':'Maret',
+						'04':'April',
+						'05':'Mei',
+						'06':'Juni',
+						'07':'Juli',
+						'08':'Agustus',
+						'09':'September',
+						'10':'Oktober',
+						'11':'November',
+						'12':'Desember',
+					}
+
+
+				var timeHighlight = `
+					<div>${tanggal} ${monthWording[bulan]} ${tahun}</div>
+				`
+
+				var style = `
+					<div class="row">
+						<div class="col s12 m6 l6 xl3">
+								<div class="blocking card gradient-green white-text">
+									<div class="row">
+										<div class="col s7 m7">
+											<i class="material-icons background-round mt-5">accessibility</i>
+										</div>
+										
+										<div class="col s5 m5 right-align">
+											<h2>Sembuh</h2>
+											<div class="value">${response.recovered}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						<div class="col s12 m6 l6 xl3">
+							<div class="blocking card gradient-cyan white-text">
+								
+								<div class="row">
+									<div class="col s7 m7">										
+										<i class="material-icons background-round mt-5">show_chart</i>
+									</div>
+									
+									<div class="col s5 m5 right-align">
+										<h2>Positif</h2>
+										<div class="value">${response.confirmed}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col s12 m6 l6 xl3">
+							<div class="blocking card gradient-orange white-text">
+								<div class="row">
+									<div class="col s7 m7">
+										<i class="material-icons background-round mt-5">local_hospital</i>
+									</div>
+									
+									<div class="col s5 m5 right-align">
+										<h2>Dirawat</h2>
+										<div class="value">${response.activeCare}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col s12 m6 l6 xl3">
+							<div class="blocking card gradient-red white-text">
+								<div class="row">
+									<div class="col s7 m7">
+										<i class="material-icons background-round mt-5">warning</i>
+									</div>
+									
+									<div class="col s5 m5 right-align">
+										<h2>Meninggal</h2>
+										<div class="value">${response.deceased}</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				`
+
+				$("#waktu").append(timeHighlight);
+				$("#data").append(style);
+			}
+		})
+	</script>
+</body>
+</html>
