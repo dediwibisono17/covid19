@@ -26,10 +26,13 @@
 		var proxy = 'https://cors-anywhere.herokuapp.com/';
 		var url = 'https://api.kawalcovid19.id/case/summary';
 		$.ajax({
-			url: url,
+			url: proxy + url,
 			type: 'GET',
 			jsonp: "callback",
-			dataType: 'jsonp',
+			dataType: 'json',
+			headers: {
+			"x-requested-with": "xhr" 
+		      },
 			success: function(response) {
 				var timee = response.metadata.lastUpdatedAt;
 				var a = timee.substr(0,10);
@@ -122,7 +125,11 @@
 				$("#waktu").append(timeHighlight);
 				$("#data").append(style);
 			}
-		})
+		}).done(function(resp){
+			console.log("resp:",resp);
+		}).fail(function(jqXHR, textStatus) { 
+		      console.error("textStatus",textStatus)
+		    })
 	</script>
 </body>
 </html>
