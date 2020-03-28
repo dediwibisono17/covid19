@@ -23,6 +23,11 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
+		response = HttpResponse(json.dumps('{"status" : "success"}'))
+		response.__setitem__("Content-type", "application/json")
+		response.__setitem__("Access-Control-Allow-Origin", "*")
+
+		return response
 		$.ajax({
 			url: 'https://api.kawalcovid19.id/case/summary',
 			type: 'GET',
