@@ -30,10 +30,6 @@
 			type: 'GET',
 			jsonp: "callback",
 			dataType: 'jsonp',
-			data: {
-				q: "select title,abstract,url from search.news where query=\"cat\"",
-				format: "json"
-			    },
 			success: function(response) {
 				var timee = response.metadata.lastUpdatedAt;
 				var a = timee.substr(0,10);
