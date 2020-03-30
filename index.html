@@ -20,7 +20,6 @@
 			</a>
 		</div>
 	</div>
-	<script type="text/javascript" src="https://www.turnjs.com/lib/turn.min.js "></script> 
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
@@ -31,8 +30,7 @@
 		$.ajax({
 			url: new_url,
 			type: 'GET',
-			dataType: 'jsonp',
-			success: function(response) {
+			/*success: function(response) {
 				console.log(response);
 				var timee = response.metadata.lastUpdatedAt;
 				var a = timee.substr(0,10);
@@ -124,7 +122,10 @@
 
 				$("#waktu").append(timeHighlight);
 				$("#data").append(style);
-			}
+			}*/
+		success: function(response){
+			console.log(response)
+		}
 		}).done(function(resp){
 			console.log("resp:",resp);
 		}).fail(function(jqXHR, textStatus) { 
