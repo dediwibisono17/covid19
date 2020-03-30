@@ -1,136 +1,1204 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Update Covid 19</title>
-	<link rel="stylesheet" href="css/materialize.min.css">
-	<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-	<div class="container">
-		<h1 class="center-align">Data Covid-19 Terbaru</h1>
-		<div id="waktu"></div>
-		<div id="data"></div>
-		<p>Untuk informasi selengkapnya bisa cek di <a href="https://kawalcovid19.id/">https://kawalcovid19.id/</a></p>
-		<div class="sumber">
-			Sumber: 
-			<a href="https://api.kawalcovid19.id/case/summary" target="_blank">
-				<i>https://api.kawalcovid19.id/case/summary</i>
-			</a>
-		</div>
-	</div>
-	<script src="js/jquery-1.11.2.min.js"></script>
-	<script src="js/materialize.min.js"></script>
-	<script>
-		
-		var proxy = 'https://crossorigin.me/';
-		var url = 'http://api.kawalcovid19.id/case/summary';
-		var new_url = 'https://api.kawalcorona.com/indonesia/provinsi/';
-		$.ajax({
-			url: new_url,
-			type: 'GET',
-			/*success: function(response) {
-				console.log(response);
-				var timee = response.metadata.lastUpdatedAt;
-				var a = timee.substr(0,10);
-				var tanggal = a.substr(8,9);
-				var bulan = a.substr(5,2);
-				var tahun = a.substr(0,4);
+<script src={{ Config::get('urltrain.SYS') . "asset/pc/js/general.js" }} type="text/javascript"></script>
+<script pagespeed_no_defer="" type="text/javascript">
+	var url_search = "{{ Config::get('urltrain.SYS')}}" + "{{ $search['url_search']}}"
+	var isLogin = '{{$isLogin}}';
+    var ssoTotalPassenger = '{{$ssoTotalPassenger}}';
+	//window.setTimeout('checkIfContinue(url_search)', 7*60*1000);  // 7 minutes
+	
+	$("input.next").click(function(event) {
+		/*var origCode = "{{ $schedule['orig'] }}";
+		var destCode = "{{ $schedule['dest'] }}";
+		var infantNumber = "{{ $schedule['infant'] }}";
 
-				var monthWording = {
-						'01':'Januari',
-						'02':'Februari',
-						'03':'Maret',
-						'04':'April',
-						'05':'Mei',
-						'06':'Juni',
-						'07':'Juli',
-						'08':'Agustus',
-						'09':'September',
-						'10':'Oktober',
-						'11':'November',
-						'12':'Desember',
-					}
+		var origData = jQuery.grep(availableTags, function(e) { return e.stationcode == origCode; });
+		var destData = jQuery.grep(availableTags, function(e) { return e.stationcode == destCode; });
+		if((origData[0].area=='Bogor' && destData[0].area=='Sukabumi') || (origData[0].area=='Sukabumi' && destData[0].area=='Bogor')){//MPAVI-1786 Bogor-Sukabumi or vice-versa
+			if(infantNumber > 0)
+				alert('Pelanggan Yth. \nUntuk rute ini, tidak ada harga tiket untuk penumpang bayi. Harga tiket bayi sudah termasuk dengan tiket penumpang dewasa, sehingga nama yang tertera hanya nama penumpang dewasa.');
+		}*/
+
+		//MPAVI-2030 -- Promo KAI - Eks(y)
+        var orClass = "{{ @$detailBooking['selectedclass'] }}";
+        var orSubClass = "{{ @$detailBooking['selectedsubclass'] }}";
+        var orDepatureDate ="{{@$schedule['godate']}}";
+        var orDepature = "";
+        if(orDepatureDate!=""){
+            orDepature = orDepatureDate.substring(6,10)+ orDepatureDate.substring(3,5)+ orDepatureDate.substring(0,2)
+        }
+        var retClass = "{{ @$detailBooking['retselectedclass'] }}";
+        var retSubClass = "{{ @$detailBooking['retselectedsubclass'] }}";
+        var retDepatureDate ="{{@$schedule['retgodate']}}";
+        var retDepature = "";
+        if(retDepatureDate!=""){
+            retDepature = retDepatureDate.substring(6,10)+ retDepatureDate.substring(3,5)+ retDepatureDate.substring(0,2)
+        }
+
+        if((orClass=="E" && orSubClass=="Y" && orDepature<="20171031") || (retClass=="E" && retSubClass=="Y" && retDepature <="20171031")){
+            alert('Pelanggan Yth. \nTiket kelas Eksekutif ini merupakan promo dari KAI. \nTiket tidak dapat diubah jadwalnya dan tidak dapat dilakukan refund.');
+        }
+        //END MPAVI-2030
 
 
-				var timeHighlight = `
-					<div>${tanggal} ${monthWording[bulan]} ${tahun}</div>
-				`
-
-				var style = `
-					<div class="row">
-						<div class="col s12 m6 l6 xl3">
-								<div class="blocking card gradient-green white-text">
-									<div class="row">
-										<div class="col s7 m7">
-											<i class="material-icons background-round mt-5">accessibility</i>
-										</div>
-										
-										<div class="col s5 m5 right-align">
-											<h2>Sembuh</h2>
-											<div class="value">${response.recovered}</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						<div class="col s12 m6 l6 xl3">
-							<div class="blocking card gradient-cyan white-text">
-								
-								<div class="row">
-									<div class="col s7 m7">										
-										<i class="material-icons background-round mt-5">show_chart</i>
-									</div>
-									
-									<div class="col s5 m5 right-align">
-										<h2>Positif</h2>
-										<div class="value">${response.confirmed}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col s12 m6 l6 xl3">
-							<div class="blocking card gradient-orange white-text">
-								<div class="row">
-									<div class="col s7 m7">
-										<i class="material-icons background-round mt-5">local_hospital</i>
-									</div>
-									
-									<div class="col s5 m5 right-align">
-										<h2>Dirawat</h2>
-										<div class="value">${response.activeCare}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col s12 m6 l6 xl3">
-							<div class="blocking card gradient-red white-text">
-								<div class="row">
-									<div class="col s7 m7">
-										<i class="material-icons background-round mt-5">warning</i>
-									</div>
-									
-									<div class="col s5 m5 right-align">
-										<h2>Meninggal</h2>
-										<div class="value">${response.deceased}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				`
-
-				$("#waktu").append(timeHighlight);
-				$("#data").append(style);
-			}*/
-		success: function(response){
-			console.log(response)
+		if(validateInput('all') > 0){
+			event.preventDefault()
+		}else{
+			$("#ModalPembayaran").modal();
+			$("#ModalPembayaran .StepOne").css("display","none");
+//			$("#ModalPembayaran .ConfirmationStep").css("display","block");
+            doBookingProcess();
 		}
-		}).done(function(resp){
-			console.log("resp:",resp);
-		}).fail(function(jqXHR, textStatus) { 
-		      console.log("textStatus",textStatus)
-		    })
-	</script>
-</body>
-</html>
+   	 })
+
+	function doBookingProcess(){
+		var request = {};
+		$('#formPenumpang').find(':input').each(function(){
+			request[$(this).attr('name')]   = $(this).val().trim();
+		})		
+		
+		const isInsuranceChecked = $('#insuranceCheck:checked').length > 0;
+		if (isInsuranceChecked) {
+			request.isWithInsurance = true;
+			request.insurance_product_id = product_id;
+			request.insurance_plan_id = plan_id;
+		}
+
+		// function showData(click){
+		// 	if (click.checked) {
+		// 		ajax_test();			
+		// 	} else {
+		// 		$(".insurance-total").empty();
+		// 		$(".total").find("td:last").remove();
+		// 		$(".total").append(`
+		// 		<td>${number_format(price_total, 0, '', '.')}</td>
+		// 		`)
+		// 		localStorage.removeItem('WebInsurance');
+		// 	}
+			
+		// }
+		console.log(isInsuranceChecked);
+		
+
+		doBooking(request)
+		setTimeout(function(){
+			$("#ModalPembayaran .imageLoaderModal .imageTunggu").css("display","none");
+			$("#ModalPembayaran .imageLoaderModal .statusBerhasil").css("display","block");
+		}, 2000);
+
+		$("#ModalPembayaran .ConfirmationStep").css("display","none");
+		$("#ModalPembayaran .StepOne").css("display","none");
+		$("#ModalPembayaran .StepTwo").css("display","block");
+
+		function count1() {
+			var startTime = document.getElementById('hms1').innerHTML;
+			var pieces = startTime.split(":");
+			var time = new Date(); time.setHours(pieces[0]);
+			time.setMinutes(pieces[1]);
+			time.setSeconds(pieces[2]);
+			var timedif = new Date(time.valueOf() - 1000);
+			var newtime = timedif.toTimeString().split(" ")[0];
+			document.getElementById('hms1').innerHTML=newtime;
+			if(newtime!=='00:00:00'){
+				setTimeout(count1, 1000);
+			}else
+			{
+				document.getElementById('hms1').innerHTML='<span class="ended">Telah Habis</span>';
+			}
+		}
+		count1();
+	}
+
+	// console request
+	// samaDenganKontak: "true"
+	// adult_salutation_1: "Tuan"
+	// adult_name_1: "dedi wibisono"
+	// adult_id_type_1: "KTP"
+	// adult_id_no_1: "391203901203"
+	// undefined: "Kembali"
+	// cb: "on"
+	function doBooking(request) {
+		$.ajax({
+			method: "GET",
+			data: request,
+			url: "{{ Config::get('urltrain.SYS') }}" + 'api-dobooking'
+		})
+
+		// console obj
+		// {
+		// 	"departure_station": "GMR",
+		// 	"arrival_station": "BD",
+		// 	"departure_date": "2020-03-18 22:30:00",
+		// 	"arrival_date": "2020-03-19 05:30:00",
+		// 	"train_no": "KLN89",
+		// 	"train_name": "KA LINTAS HARI MALAM",
+		// 	"class": "K",
+		// 	"subclass": "C",
+		// 	"pax_num": [1, 0, 0],
+		// 	"pax_name": ["DEDI WIBISONO"],
+		// 	"seat": [{
+		// 		"wagon_no": "1",
+		// 		"wagon_code": "EKO",
+		// 		"seat": "3D",
+		// 		"ticketnum": "IPEGI_3077SV333ON1"
+		// 	}],
+		// 	"book_balance": 83000,
+		// 	"normal_sales": 75500,
+		// 	"extra_fee": "7500",
+		// 	"discount": 0,
+		// 	"kai_payment_code": "212363897731812",
+		// 	"kai_transaction_id": 2832885,
+		// 	"total_price_adult": 75500,
+		// 	"total_price_infant": 0,
+		// 	"order_id": 5433258,
+		// 	"device": "pc web",
+		// 	"order_number": "31158442668512",
+		// 	"total_issued": 0,
+		// 	"server_time": "17\/03\/2020 13:31:27",
+		// 	"booking_expired_date": "17\/03\/2020 14:01:27",
+		// 	"booking_expired_date_count": "30",
+		// 	"system_type": "RTSNG"
+		// }
+
+		.done(function (obj) {
+			var response = JSON.parse(obj);
+
+			if(response.status != 'NOK') {
+				resetTimeLimitTransfer();
+				if("{{ $search['is_roundtrip'] }}" == 1){
+					var book_balance 	= parseInt(response.total_book_balance + price_insurance)
+				}else{
+					var book_balance 	= parseInt(response.book_balance + price_insurance);
+				}
+
+				var current_amount_present = parseInt('{{ $total_amount }}');
+				var current_amount = current_amount_present + price_insurance;
+
+				// console.log("current_amount: ", current_amount);
+				
+
+				/*if(isLogin == 1){
+					checkAddUpdateSSOPassengerList();
+				}*/
+
+				if (book_balance != current_amount) {
+					var request = {};
+					request['log'] = '[detailPassenger] Event price change happened';
+					log(request);
+				}
+				window.location = '{{ config('urltrain.SYS') }}' + 'transaction/detailpembayaran'
+			}else{				
+				if(response.error_code == "001000"){
+					//alert("Tiket telah habis. Silahkan ulangi pesanan anda.")
+					alert('Pemesanan ke sistem KAI gagal. Tidak ada harga untuk penumpang. Anda akan diarahkan ke halaman pencarian.');
+				}else if(response.error_code == "611" || response.error_code == 'TRP-232'){
+					alert(response.message);
+					window.location = "{{ Config::get('urltrain.SYS')}}" + "transaction/detailpenumpang";
+					return false;
+				}else if(response.error_code == "610"){
+					alert(response.message);
+					window.location = url_search;
+					return false;
+				}else if(response.error_code == '510106'){
+					alert('Maaf, jadwal kereta yang Anda pilih kurang dari 3 jam sebelum keberangkatan. Silakan pilih jadwal lain untuk pemesanan.');
+				}else if(typeof response.message !== 'undefined'){
+					alert(response.message);
+				}else {
+					alert("Mohon maaf, terjadi kesalahan sistem")
+				}
+
+				window.location = url_search
+			}
+
+		});
+
+		return true;
+	}
+
+	function closeStepThree(){
+		$("#ModalPembayaran .StepThree").css("display", "none");
+		$('.modal').hide();
+		$('.modal-backdrop').hide();
+
+		var request = {};
+		request['cancel_note'] = 'User click "Batal" when Confirmation Price Change in Data Penumpang';
+		cancelBooking(request);
+		window.location = url_search;
+	}
+
+	function closeConfirmationStep(){
+		$("#ModalPembayaran .ConfirmationStep").css("display", "none");
+		$('.modal').hide();
+		$('.modal-backdrop').hide();
+
+		window.location.reload();
+	}
+
+	function log(request) {
+	    $.ajax({
+			method: "GET",
+			data: request,
+			url: "{{ Config::get('urltrain.SYS') }}" + 'api-log'
+	    })
+	    .done(function (obj) {
+	        //console.log('success cancel booking');
+	    });
+
+	    return true;
+	}
+
+	function cancelBooking(request) {
+	    $.ajax({
+			method: "GET",
+			data: request,
+	      	url: "{{ Config::get('urltrain.SYS') }}" + 'api-cancelbooking'
+	    })
+	    .done(function (obj) {
+	        //console.log('success cancel booking');
+	    });
+
+	    return true;
+	}
+
+	createCookie('totaltime',"",-1);
+	
+	function resetTimeLimitTransfer(){
+		if (isLocalStorageNameSupported() == true) {
+			localStorage.setItem('transfertimer', new Date());
+		} else {
+			createCookie('transfertimer', new Date());
+		}
+	}
+
+	function validatePhone(input){
+		var error = 0;
+
+		$(input).val($.trim($(input).val()))
+		var is_zero = $(input).val().length;
+		var re = /^[0-9]+$/;
+		var is_num = re.test($(input).val());
+
+		// Validate Data Length
+		if (is_zero >= 7 && is_zero <= 16) {
+			$(input).closest('.formLine').removeClass("errorForm");
+			// Validate Data Type
+			if (is_num) {
+				$(input).closest('.formLine').removeClass("errorForm");
+			}
+			else {
+				$(input).closest('.formLine').addClass("errorForm");
+				$(input).siblings('.errorMessage').find('span').text("Format data tidak valid");
+				error = error + 1;
+			}
+		}else {
+			$(input).closest('.formLine').addClass("errorForm");
+			if(is_zero == 0){
+				$(input).siblings('.errorMessage').find('span').text("Data ini dibutuhkan");
+			}else{
+				$(input).siblings('.errorMessage').find('span').text("Mohon masukkan 7-16 karakter");
+			}
+			error = error + 1;
+		}
+
+		return error;
+	}
+
+	function validateNoktp(input){
+		var error = 0;
+
+		$(input).val($.trim($(input).val()));
+		var is_zero = $(input).val().trim().length;
+		var re = /^[A-Za-z0-9]+$/;
+		var is_num = re.test($(input).val());
+
+		// Validate Data Length
+		if (is_zero >= 5 && is_zero <= 20) {
+			$(input).closest('.formLine').removeClass("errorForm");
+			// Validate Data Type
+			if (is_num) {
+				$(input).closest('.formLine').removeClass("errorForm");
+			}
+			else {
+				$(input).closest('.formLine').addClass("errorForm");
+				$(input).siblings('.errorMessage').find('span').text("Format data tidak valid");
+				error = error + 1;
+			}
+		}else {
+			$(input).closest('.formLine').addClass("errorForm");
+			if(is_zero == 0){
+				$(input).siblings('.errorMessage').find('span').text("Data ini dibutuhkan");
+			}else{
+				$(input).siblings('.errorMessage').find('span').text("Mohon masukkan 5-20 karakter");
+			}
+			error = error + 1;
+		}
+
+		return error;
+	}
+
+	function validateNamaLengkap(input){
+		var error = 0;
+
+//		$(input).val($.trim($(input).val()));
+		var is_zero = $(input).val().trim().length;
+		var re = /^[a-zA-Z ]+$/;
+		var is_char = re.test($(input).val());
+
+		// Validate Data Length
+		if (is_zero >= 3 && is_zero <= 25) {
+			$(input).closest('.formLine').removeClass("errorForm");
+			// Validate Data Type
+			if (is_char) {
+				$(input).closest('.formLine').removeClass("errorForm");
+			}
+			else {
+				$(input).closest('.formLine').addClass("errorForm");
+				$(input).siblings('.errorMessage').find('span').text("Format data tidak valid");
+				error = error + 1;
+			}
+		}
+		else {
+			$(input).closest('.formLine').addClass("errorForm");
+			if(is_zero==0){
+				$(input).siblings('.errorMessage').find('span').text("Data ini dibutuhkan");
+			}else{
+				$(input).siblings('.errorMessage').find('span').text("Mohon masukkan 3-25 karakter");
+			}
+			error = error + 1;
+		}
+
+		return error;
+	}
+
+	function validateBdDate(input){
+		var error = 0;
+		var bdDate = $(input).attr('name');
+		var adultInfant = bdDate.substring(0, bdDate.indexOf('_'));
+		var seqId = bdDate.substring(bdDate.length - 1);
+
+		var bdMonth = $('#'+adultInfant+'_bdmonth_'+seqId).val();
+		var bdYear = $('#'+adultInfant+'_bdyear_'+seqId).val();
+		
+		if(input.val() == null || bdMonth == null || bdYear == null){
+			$(input).closest('.right.dmy').find('.formLine').last().addClass("errorForm");
+			error = error + 1;
+		}else{
+			$(input).closest('.right.dmy').find('.formLine').last().removeClass("errorForm");
+		}
+
+		return error;
+	}
+
+	function validateBdMonth(input){
+		var error = 0;
+		var bdMonth = $(input).attr('name');
+		var adultInfant = bdMonth.substring(0, bdMonth.indexOf('_'));
+		var seqId = bdMonth.substring(bdMonth.length - 1);
+
+		var bdDate = $('#'+adultInfant+'_bddate_'+seqId).val();
+		var bdYear = $('#'+adultInfant+'_bdyear_'+seqId).val();
+		
+		if(input.val() == null || bdDate == null || bdYear == null){
+			$(input).closest('.right.dmy').find('.formLine').last().addClass("errorForm");
+			error = error + 1;
+		}else{
+			$(input).closest('.right.dmy').find('.formLine').last().removeClass("errorForm");
+		}
+
+		return error;
+	}
+
+	function validateBdYear(input){
+		var error = 0;
+		var bdYear = $(input).attr('name');
+		var adultInfant = bdYear.substring(0, bdYear.indexOf('_'));
+		var seqId = bdYear.substring(bdYear.length - 1);
+
+		var bdDate = $('#'+adultInfant+'_bddate_'+seqId).val();
+		var bdMonth = $('#'+adultInfant+'_bdmonth_'+seqId).val();
+		
+		if(input.val() == null || bdDate == null || bdMonth == null){
+			$(input).closest('.right.dmy').find('.formLine').last().addClass("errorForm");
+			error = error + 1;
+		}else{
+			$(input).closest('.right.dmy').find('.formLine').last().removeClass("errorForm");
+		}
+
+		return error;
+	}
+
+	function validateInput(field,elm){
+		var error = 0;
+
+		if (field == 'all') {
+			$(".phone").each(function () {
+				error += validatePhone($(this))
+			})
+
+			$(".noktp").each(function () {
+				error += validateNoktp($(this))
+			})
+
+			$(".namalengkap").each(function () {
+				error += validateNamaLengkap($(this))
+			})
+
+			$(".bddate").each(function () {
+				error += validateBdDate($(this))
+			})
+		}
+		else if (field == 'phone') error = validatePhone($(elm))
+		else if (field == 'noktp') error = validateNoktp($(elm))
+		else if (field == 'namalengkap') error = validateNamaLengkap($(elm))
+		else if (field == 'bddate') error = validateBdDate($(elm))
+		else if (field == 'bdmonth') error = validateBdMonth($(elm))
+		else if (field == 'bdyear') error = validateBdYear($(elm))
+
+		if(field == 'namalengkap' || field == 'all') error = !checkDuplicateName() 	? ++error : error
+		if(field == 'noktp' || field == 'all') error = !checkDuplicateID() 	? ++error : error
+		if(field == 'phone' || field == 'all') error = !checkDuplicatePhone() 	? ++error : error
+
+		if(isLogin == 0){
+			if(document.getElementById('outer-checkbox').checked == false){
+				$('.checkboxValidate').addClass("addError");
+				$('span.warning').attr('style','display:block;');
+				error+=1;
+			}else{
+				$('.checkboxValidate').removeClass("addError");
+				$('span.warning').attr('style','display:none;');
+			}
+		}
+
+		return error
+	}
+
+	function checkDuplicateName(){
+	  var error = true;
+	  var datanama = [];
+	  $(".namalengkap").each(function() {
+			var self = $(this);
+			var val = self.val();
+			
+			if(val==undefined || val==""){//needed error
+			  error = false
+			} else if (jQuery.inArray(val, datanama) > -1) {
+				self.closest('.formLine').addClass("errorForm");
+		        self.siblings('.errorMessage').find('span').text("Nama penumpang tidak boleh sama dalam 1 pesanan");
+				error = false
+				alert('Nama penumpang tidak boleh sama dalam 1 pesanan');
+			} else{					
+				datanama.push(val);	
+			}
+	  });
+	  return error;
+	}		
+
+	function checkDuplicateID(){
+	  var error = true;
+	  var dataktp = [];
+	  $(".noktp").each(function() {
+			var self = $(this);
+			var val = self.val();
+			
+			if(val==undefined || val==""){//needed error
+			  error = false
+			} else if (jQuery.inArray(val, dataktp) > -1) {
+				self.closest('.formLine').addClass("errorForm");
+		        self.siblings('.errorMessage').find('span').text("Nomor Identitas tidak boleh sama");
+				error = false
+				alert('Tidak boleh ada Nomor Identitas yang sama dalam 1 pesanan');
+			} else{
+				dataktp.push(val);	
+			}
+	  });
+	  return error;
+	}
+
+	function checkDuplicatePhone(){
+	  var error = true;
+	  var dataphone = [];
+	  $(".phone").each(function() {
+			var self = $(this);
+			var val = self.val();
+			
+			if(val==undefined || val==""){//needed error
+			  error = false
+			} else if (jQuery.inArray(val, dataphone) > -1) {
+				self.closest('.formLine').addClass("errorForm");
+		        self.siblings('.errorMessage').find('span').text("Nomor telepon tidak boleh sama");
+				error = false
+				alert('Tidak boleh ada nomor telepon yang sama dalam 1 pesanan');
+			} else{
+				dataphone.push(val);	
+			}
+	  });
+	  return error;
+	}
+
+	$('[name="samaDenganKontak"]').change(function() {
+		if($('[name="samaDenganKontak"]').is(':checked') == true){
+			$('[name="adult_name_1"]').val('{{ $detailContact['namalengkap'] }}');
+			// $('[name="adult_mobile_1"]').val('{{ $detailContact['telepon'] }}');
+			var salutation = '{{ $detailContact['salutkontak'] }}';
+
+			var index = 0;
+			if(salutation === 'Nyonya') index = 1;
+			else if(salutation === 'Nona') index = 2;
+
+			$('[name="adult_salutation_1"]').prop('selectedIndex', index);
+
+			if(isLogin == 1 && ssoTotalPassenger > 0){
+	        	var str = '{{$ssoPassengerList}}';
+	        	var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+	        	for (var i = 1; i <= ssoList.length; i++) {
+	        		if(ssoList[i-1].name == $('[name="adult_name_1"]').val()){
+	        			if(ssoList[i-1].identity_number !== null && ssoList[i-1].identity_number !== ""){
+	        				$('[name="adult_id_no_1"]').val(ssoList[i-1].identity_number);
+	        				$('[name="adult_id_type_1"]').prop('selectedIndex',0);
+	        			}else if(ssoList[i-1].driving_license_number !== null && ssoList[i-1].driving_license_number !== ""){
+	        				$('[name="adult_id_no_1"]').val(ssoList[i-1].driving_license_number);
+	        				$('[name="adult_id_type_1"]').prop('selectedIndex',1);
+	        			}else if(ssoList[i-1].other_license_number !== null && ssoList[i-1].other_license_number !== ""){
+	        				$('[name="adult_id_no_1"]').val(ssoList[i-1].other_license_number);
+	        				$('[name="adult_id_type_1"]').prop('selectedIndex',3);
+	        			}else if(ssoList[i-1].passport_number !== null && ssoList[i-1].passport_number !== ""){
+	        				$('[name="adult_id_no_1"]').val(ssoList[i-1].passport_number);
+	        				$('[name="adult_id_type_1"]').prop('selectedIndex',2);
+	        			}
+	        		}
+	        	}
+	        }
+		}else{
+			$('[name="adult_name_1"]').val('');
+			// $('[name="adult_mobile_1"]').val('');
+			$('[name="adult_id_type_1"]').prop('selectedIndex', 0);
+			$('[name="adult_id_no_1"]').val('');
+			$('[name="adult_salutation_1"]').prop('selectedIndex', 0);
+
+			if(isLogin == 1 && ssoTotalPassenger > 0){
+				setupPassengerListSSO()
+			}
+		}
+	})
+
+	mapFilterLabel(".maparea")
+	mapFilterLabel(".mapstation")
+
+	// Center Modal
+	function centerModals(){
+		$('.modal').each(function(i){
+			var $clone = $(this).clone().css('display', 'block').appendTo('body');
+			var top = Math.round(($clone.height() - $clone.find('.modal-dialog').height()) / 2);
+			top = top > 0 ? top : 0;
+			$clone.remove();
+			$(this).find('.modal-dialog').css("margin-top", top);
+		});
+	}
+	$('.modal').on('show.bs.modal', centerModals);
+	$(window).on('resize', centerModals);
+
+	gtm();
+    function gtm() {
+    	var domain = "{{ Config::get('urltrain.SYS') }}";
+
+    	$.ajax({
+			url 		: domain+'transaction/detailpembayaran/total-paid-by-email',
+			type		: "GET",
+			data 		: { email: "{{$detailContact['email']}}" },
+			dataType: 'JSON',
+		}).done(function(msg) {
+			
+			if (msg.status == 'OK') {
+				var totalPaidByEmail = msg.data.total;
+			} else{
+				var totalPaidByEmail = 0;
+			}
+
+	        var orig = "{{ $schedule['orig'] }}";
+	        var getData = jQuery.grep(availableTags, function(e) { return e.stationcode == orig; });
+	        var isroundtrip = "{{$search['is_roundtrip']}}";
+	        if (isroundtrip > 0) {
+	            var cookie = getCookie('storageDataLayerRound');
+	            if (cookie != "") {
+	                var roundData = JSON.parse(cookie);
+	            } else {
+	                var rounddata = JSON.parse(localStorage.getItem('storageDataLayerRound'));
+	            }
+	            
+	            var dest = "{{ $schedule['retorig'] or '' }}";
+	            var getDataDest = jQuery.grep(availableTags, function(e) { return e.stationcode == dest });
+	            rounddata.train.page    = "train_form_round";
+	            rounddata.train.name    = "{{ $schedule['trainname'] }} | {{ $schedule['rettrainname'] or '' }}";
+	            rounddata.train.number  = "{{ $schedule['trainno'] }} | {{ $schedule['rettrainno'] or '' }}";
+	            rounddata.train.price   = parseInt("{{ $schedule['price'] }}") + parseInt("{{ $schedule['retprice'] or 0 }}");
+	            rounddata.train.train_booking_no_cum 	= totalPaidByEmail;
+	            rounddata.train.departure.area      = getData[0].area;
+	            rounddata.train.departure.station   = getData[0].station;
+	            rounddata.train.departure.station_cd= orig;
+	            rounddata.train.arrival.area        = getDataDest[0].area;
+	            rounddata.train.arrival.station     = getDataDest[0].station;
+	            rounddata.train.arrival.station_cd  = dest;
+	            
+	            dataLayer.push(rounddata);
+	            if (cookie != "") {
+	                createCookie('storageDataLayerRound', JSON.stringify(roundData));
+	            } else {
+	                localStorage.setItem('storageDataLayerRound', JSON.stringify(rounddata));
+	            }
+	            
+	        } else {
+	            var cookie = getCookie('storageDataLayer');
+	            if (cookie != "") {
+					var singledata = JSON.parse(cookie);					
+	            } else {
+					var singledata = JSON.parse(localStorage.getItem('storageDataLayer'));					
+	            }
+	            
+	            singledata.train.page   = "train_form_direct";
+	            singledata.train.name   = "{{ $schedule['trainname'] }}";
+	            singledata.train.number = "{{ $schedule['trainno'] }}";
+	            singledata.train.price  = parseInt("{{ $schedule['price'] }}");
+	            singledata.train.train_booking_no_cum 	= totalPaidByEmail;
+	            singledata.train.departure.area         = getData[0].area;
+	            singledata.train.departure.station      = getData[0].station;
+	            singledata.train.departure.station_cd   = orig;
+	            
+	            dataLayer.push(singledata);
+	            if (cookie != "") {
+	                createCookie('storageDataLayer', JSON.stringify(singledata));
+	            } else {
+	                localStorage.setItem('storageDataLayer', JSON.stringify(singledata));
+	            }
+
+	        }
+        }).fail(function(msg) {
+			//console.log(msg);
+		});	
+    }
+    
+    $(document).ready(function(){
+        $('[name="samaDenganKontak"]').attr('checked','checked');
+        $('[name="adult_name_1"]').val('{{ $detailContact['namalengkap'] }}');
+        // $('[name="adult_mobile_1"]').val('{{ $detailContact['telepon'] }}');
+        
+        var salutation = '{{ $detailContact['salutkontak'] }}';
+        var index = 0;
+        
+        if(salutation === 'Nyonya') index = 1;
+        else if(salutation === 'Nona') index = 2;
+        
+        $('[name="adult_salutation_1"]').prop('selectedIndex', index);
+
+        if(isLogin == 1 && ssoTotalPassenger > 0){
+        	setupPassengerListSSO();
+
+        	var str = '{{$ssoPassengerList}}';
+        	var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+        	for (var i = 1; i <= ssoList.length; i++) {
+        		if(ssoList[i-1].name == $('[name="adult_name_1"]').val()){
+        			if(ssoList[i-1].identity_number !== null && ssoList[i-1].identity_number !== ""){
+        				$('[name="adult_id_no_1"]').val(ssoList[i-1].identity_number);
+        				$('[name="adult_id_type_1"]').prop('selectedIndex',0);
+        			}else if(ssoList[i-1].driving_license_number !== null && ssoList[i-1].driving_license_number !== ""){
+        				$('[name="adult_id_no_1"]').val(ssoList[i-1].driving_license_number);
+        				$('[name="adult_id_type_1"]').prop('selectedIndex',1);
+        			}else if(ssoList[i-1].passport_number !== null && ssoList[i-1].passport_number !== ""){
+        				$('[name="adult_id_no_1"]').val(ssoList[i-1].passport_number);
+        				$('[name="adult_id_type_1"]').prop('selectedIndex',2);
+        			}else if(ssoList[i-1].other_license_number !== null && ssoList[i-1].other_license_number !== ""){
+        				$('[name="adult_id_no_1"]').val(ssoList[i-1].other_license_number);
+        				$('[name="adult_id_type_1"]').prop('selectedIndex',3);
+        			}
+        		}
+        	}
+        }
+    })
+
+    function setupPassengerListSSO(){
+    	var totalAdult = '{{$search["adult"]}}';
+    	var totalInfant = '{{$search["infant"]}}';
+    	var str = '{{$ssoPassengerList}}';
+        var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+        var isExist = false;
+        
+        for (var i = 1; i <= totalAdult; i++) {
+        	$('[name="adult_name_'+i+'"]').attr('list','ssoList');
+        }
+        for (var i = 1; i <= totalInfant; i++) {
+        	$('[name="infant_name_'+i+'"]').attr('list','ssoList');
+        }
+        str = '';
+        for (var i = 1; i <= ssoList.length; i++) {
+        	isExist = false;
+        	for (var j = 1; j <= totalAdult; j++) {
+        		if(ssoList[i-1].name == $('[name="adult_name_'+j+'"]').val())
+        			isExist = true;
+        	}
+        	for (var j = 1; j <= totalInfant; j++) {
+        		if(ssoList[i-1].name == $('[name="infant_name_'+j+'"]').val())
+        			isExist = true;
+        	}
+        	if(isExist == false)
+        		str += '<option value="'+ssoList[i-1].name+'" />';
+        }
+        var myList = document.getElementById('ssoList');
+        myList.innerHTML = str;
+    }
+
+    function checkSsoPassenger(ssoType, input){
+    	if(isLogin == 1 && ssoTotalPassenger > 0){
+    		if(ssoType == 'adult'){
+    			var str = '{{$ssoPassengerList}}';
+        		var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+        		// var isExist = false;
+        		for (var i = 1; i <= ssoList.length; i++) {
+	        		if(ssoList[i-1].name == $(input).val()){
+	        			// isExist = true;
+	        			if(ssoList[i-1].identity_number !== null && ssoList[i-1].identity_number !== ""){
+	        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].identity_number);
+	        				$(input).closest('.form').find('select.idType').prop('selectedIndex',0);
+	        			}else if(ssoList[i-1].driving_license_number !== null && ssoList[i-1].driving_license_number !== ""){
+	        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].driving_license_number);
+	        				$(input).closest('.form').find('select.idType').prop('selectedIndex',1);
+	        			}else if(ssoList[i-1].other_license_number !== null && ssoList[i-1].other_license_number !== ""){
+	        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].other_license_number);
+	        				$(input).closest('.form').find('select.idType').prop('selectedIndex',3);
+	        			}else if(ssoList[i-1].passport_number !== null && ssoList[i-1].passport_number !== ""){
+	        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].passport_number);
+	        				$(input).closest('.form').find('select.idType').prop('selectedIndex',2);
+	        			}
+
+	        			$titleIndex = 0;
+	        			if(ssoList[i-1].title == 'Tuan')
+	        				$titleIndex = 0;
+	        			else if(ssoList[i-1].title == 'Nyonya')
+	        				$titleIndex = 1;
+	        			else if(ssoList[i-1].title == 'Nona')
+	        				$titleIndex = 2;
+	        			$(input).closest('.form').find('select.adultTitle').prop('selectedIndex',$titleIndex);
+
+	        			validateInput('noktp',$(input).closest('.form').find('input.noktp'));
+	        		}
+	        	}
+    		}else if(ssoType == 'infant'){
+    			var str = '{{$ssoPassengerList}}';
+    			var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+        		for (var i = 1; i <= ssoList.length; i++) {
+	        		if(ssoList[i-1].name == $(input).val()){
+	        			$titleIndex = 0;
+	        			if(ssoList[i-1].title == 'Tuan')
+	        				$titleIndex = 0;
+	        			else if(ssoList[i-1].title == 'Nona')
+	        				$titleIndex = 1;
+	        			$(input).closest('.form').find('select.infantTitle').prop('selectedIndex',$titleIndex);
+	        		}
+	        	}
+    		}
+    		setupPassengerListSSO();
+    	}
+    }
+
+    function checkAddUpdateSSOPassengerList(){
+		var totalAdult = '{{$search["adult"]}}';
+    	var totalInfant = '{{$search["infant"]}}';
+    	var str = '{{$ssoPassengerList}}';
+        var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+    	for (var i = 1; i <= totalAdult; i++) {	// adult
+    		var paramSSO = {
+    			'name' : $('[name="adult_name_'+i+'"]').val(),
+    			'title' : $('[name="adult_salutation_'+i+'"]').val(),
+    			'idType' : $('[name="adult_id_type_'+i+'"]').val(),
+    			'idNumber' : $('[name="adult_id_no_'+i+'"]').val()
+    		}
+    		$.ajax({
+				method: "POST",
+				data: paramSSO,
+				url: "{{ Config::get('urltrain.SYS') }}" + 'api-checkAddUpdateSSOPassengerList'
+			})
+		}
+
+		for (var i = 1; i <= totalInfant; i++) { // infant
+			var paramSSO = {
+    			'name' : $('[name="infant_name_'+i+'"]').val(),
+    			'title' : $('[name="infant_salutation_'+i+'"]').val()
+    		}
+    		$.ajax({
+				method: "POST",
+				data: paramSSO,
+				url: "{{ Config::get('urltrain.SYS') }}" + 'api-checkAddUpdateSSOPassengerList'
+			})
+		}
+    	/*var isExist = false;
+        var needUpdate = false;
+
+        for (var i = 1; i <= totalAdult; i++) {	// adult
+        	if(ssoList.length > 0){
+        		isExist = false;
+        		needUpdate = false;
+	        	for (var j = 1; j <= ssoList.length; j++) {
+	        		if(isExist == false && $('[name="adult_name_'+i+'"]').val() == ssoList[j-1].name){
+	        			isExist = true;
+	        			var paramSSO = {
+	        				'id' : ssoList[j-1].id,
+		        			'name' : $('[name="adult_name_'+i+'"]').val(),
+		        			'title' : $('[name="adult_salutation_'+i+'"]').val(),
+		        		};
+		        		if(ssoList[j-1].title != $('[name="adult_salutation_'+i+'"]').val()){
+		        			needUpdate = true;
+		        		}
+
+	        			if(ssoList[j-1].identity_number !== null && ssoList[j-1].identity_number !== ""){
+	        				if($('[name="adult_id_type_'+i+'"]').val() == 'KTP' &&
+	        					$('[name="adult_id_no_'+i+'"]').val() != ssoList[j-1].identity_number){
+	        					needUpdate = true;
+			        			paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM'){
+	        					needUpdate = true;
+	        					paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport'){
+	        					needUpdate = true;
+	        					paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya'){
+	        					needUpdate = true;
+	        					paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}
+	        			}else if(ssoList[j-1].driving_license_number !== null && ssoList[j-1].driving_license_number !== ""){
+	        				if($('[name="adult_id_type_'+i+'"]').val() == 'KTP'){
+	        					needUpdate = true;
+	        					paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM' &&
+	        					$('[name="adult_id_no_'+i+'"]').val() != ssoList[j-1].driving_license_number){
+	        					needUpdate = true;
+	        					paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport'){
+	        					needUpdate = true;
+	        					paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya'){
+	        					needUpdate = true;
+	        					paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}
+	        			}else if(ssoList[j-1].other_license_number !== null && ssoList[j-1].other_license_number !== ""){
+	        				if($('[name="adult_id_type_'+i+'"]').val() == 'KTP'){
+	        					needUpdate = true;
+	        					paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM'){
+	        					needUpdate = true;
+	        					paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport'){
+	        					needUpdate = true;
+	        					paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya' &&
+	        					$('[name="adult_id_no_'+i+'"]').val() != ssoList[j-1].other_license_number){
+	        					needUpdate = true;
+	        					paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}
+	        			}else if(ssoList[j-1].passport_number !== null && ssoList[j-1].passport_number !== ""){
+	        				if($('[name="adult_id_type_'+i+'"]').val() == 'KTP'){
+	        					needUpdate = true;
+	        					paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM'){
+	        					needUpdate = true;
+	        					paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport' &&
+	        					$('[name="adult_id_no_'+i+'"]').val() != ssoList[j-1].passport_number){
+	        					needUpdate = true;
+	        					paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya'){
+	        					needUpdate = true;
+	        					paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        				}
+	        			}
+
+	        			if(needUpdate == true){
+	        				$.ajax({
+								method: "POST",
+								data: paramSSO,
+								url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoUpdatePassenger'
+							})
+	        			}
+	        		}
+	        	}
+	        	if(isExist == false){ // process add
+	        		var paramSSO = {
+	        			'name' : $('[name="adult_name_'+i+'"]').val(),
+	        			'title' : $('[name="adult_salutation_'+i+'"]').val()
+	        		};
+	        		if($('[name="adult_id_type_'+i+'"]').val() == 'KTP')
+	        			paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        		else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM')
+	        			paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        		else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport')
+	        			paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+	        		else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya')
+	        			paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+
+	        		$.ajax({
+						method: "POST",
+						data: paramSSO,
+						url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoAddPassenger'
+					})
+	        	}
+        	}else{ // process add
+        		var paramSSO = {
+        			'name' : $('[name="adult_name_'+i+'"]').val(),
+        			'title' : $('[name="adult_salutation_'+i+'"]').val()
+        		};
+        		if($('[name="adult_id_type_'+i+'"]').val() == 'KTP')
+        			paramSSO['identity_number'] = $('[name="adult_id_no_'+i+'"]').val();
+        		else if($('[name="adult_id_type_'+i+'"]').val() == 'SIM')
+        			paramSSO['driving_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+        		else if($('[name="adult_id_type_'+i+'"]').val() == 'Passport')
+        			paramSSO['passport_number'] = $('[name="adult_id_no_'+i+'"]').val();
+        		else if($('[name="adult_id_type_'+i+'"]').val() == 'Lainnya')
+        			paramSSO['other_license_number'] = $('[name="adult_id_no_'+i+'"]').val();
+
+        		$.ajax({
+					method: "POST",
+					data: paramSSO,
+					url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoAddPassenger'
+				})
+        	}
+        }
+
+        for (var i = 1; i <= totalInfant; i++) { // infant
+        	if(ssoList.length > 0){
+        		isExist = false;
+        		needUpdate = false;
+	        	for (var j = 1; j <= ssoList.length; j++) {
+	        		if(isExist == false && $('[name="infant_name_'+i+'"]').val() == ssoList[j-1].name){
+	        			isExist = true;
+	        			var paramSSO = {
+	        				'id' : ssoList[j-1].id,
+		        			'name' : $('[name="infant_name_'+i+'"]').val(),
+		        			'title' : $('[name="infant_salutation_'+i+'"]').val(),
+		        		};
+
+		        		if(ssoList[j-1].title != $('[name="infant_salutation_'+i+'"]').val()){
+		        			needUpdate = true;
+		        		}
+	        			
+	        			if(needUpdate == true){
+	        				$.ajax({
+								method: "POST",
+								data: paramSSO,
+								url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoUpdatePassenger'
+							})
+	        			}
+	        		}
+	        	}
+	        	if(isExist == false){ // process add
+	        		var paramSSO = {
+	        			'name' : $('[name="infant_name_'+i+'"]').val(),
+	        			'title' : $('[name="infant_salutation_'+i+'"]').val()
+	        		};
+	        		$.ajax({
+						method: "POST",
+						data: paramSSO,
+						url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoAddPassenger'
+					})
+	        	}
+        	}else{ // process add
+        		var paramSSO = {
+        			'name' : $('[name="infant_name_'+i+'"]').val(),
+        			'title' : $('[name="infant_salutation_'+i+'"]').val()
+        		};
+        		$.ajax({
+					method: "POST",
+					data: paramSSO,
+					url: "{{ Config::get('urltrain.SYS') }}" + 'api-ssoAddPassenger'
+				})
+        	}
+        }*/
+	}
+
+	function checkSsoId(input){
+		if(isLogin == 1 && ssoTotalPassenger > 0){
+			var str = '{{$ssoPassengerList}}';
+    		var ssoList = JSON.parse(str.replace(/&quot;/g, '"'));
+    		for (var i = 1; i <= ssoList.length; i++) {
+    			var nameInput = $(input).closest('.form').find('input.namalengkap');
+    			if(ssoList[i-1].name == nameInput.val()){
+    				if(ssoList[i-1].identity_number !== null && ssoList[i-1].identity_number !== "" && $(input).val() == 'KTP'){
+        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].identity_number);
+        				validateInput('noktp',$(input).closest('.form').find('input.noktp'));
+        			}else if(ssoList[i-1].driving_license_number !== null && ssoList[i-1].driving_license_number !== "" && $(input).val() == 'SIM'){
+        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].driving_license_number);
+        				validateInput('noktp',$(input).closest('.form').find('input.noktp'));
+        			}else if(ssoList[i-1].passport_number !== null && ssoList[i-1].passport_number !== "" && $(input).val() == 'Passport'){
+        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].passport_number);
+        				validateInput('noktp',$(input).closest('.form').find('input.noktp'));
+        			}else if(ssoList[i-1].other_license_number !== null && ssoList[i-1].other_license_number !== "" && $(input).val() == 'Lainnya'){
+        				$(input).closest('.form').find('input.noktp').val(ssoList[i-1].other_license_number);
+        				validateInput('noktp',$(input).closest('.form').find('input.noktp'));
+        			}
+    			}
+    		}
+		}
+	}
+
+	$('input.namalengkap').mousedown(function(){ // to automaticaly show suggestion in the first click
+		if( document.activeElement == this )return;
+		$(this).focus();
+	});
+
+	$('#outer-checkbox').click(function(){
+		if(document.getElementById('outer-checkbox').checked == true){
+			$('.checkboxValidate').removeClass("addError");
+			$('span.warning').attr('style','display:none;');
+		}else{
+			$('.checkboxValidate').addClass("addError");
+			$('span.warning').attr('style','display:block;');
+		}
+	});
+
+	// get insurance detail DEDI CODE	
+	var domain  = "{{ Config::get('urltrain.INSURANCE') }}";
+	
+	// variable in sidebar
+	var count_adult = "{{ $search['adult']}}";
+	var count_infant = "{{ $search['infant'] }}";
+	var price_adult = "{{ $detailBooking['adult_price'] }}";
+	var price_infant = "{{ $detailBooking['infant_price'] }}";
+	var price_total_adult = price_adult * count_adult; //pake ini di get insurance
+	var price_total_infant = count_infant * price_infant;
+	var price_total = price_total_adult + price_total_infant;
+
+	var price_return = parseInt("{{ $schedule['retprice'] }}") * count_adult;
+	
+	var get_class = "{{ $schedule['class'] }}";
+	var get_orig = "{{ $schedule['orig'] }}";
+	var get_dest = "{{ $schedule['dest'] }}";
+	var get_trip = "{{$search['is_roundtrip']}}";
+		
+	var classWording = {'E':'EKS','K':'EKO','B':'BIS'}
+	
+	//var insurance	= domain + "train/v1/insurance/product/plan/?productId=579&planId=586";
+	var insurance = domain + "train/v1/insurance/product?merchantName=train&tripOrigin="+ get_orig +"&tripDestination="+ get_dest +"&tripType="+ get_trip +"&passengerNum="+ count_adult +"&totalPrice="+ price_total_adult +"&trainClass="+ classWording[get_class] +"";
+
+	var total_insurance = '';
+	var price_insurance = '';
+	var product_id = '';
+	var plan_id = '';
+
+	var empt = "";
+	localStorage.setItem("WebInsurance", empt);
+	
+	function ajax_test(){
+		$.ajax({ 
+			url: insurance,
+			success: function(data, status, xhr){
+			
+			price_insurance = data.data[0].plans[0].price_pax * count_adult;
+			total_insurance = price_insurance + price_total + price_return;
+			product_id = data.data[0].id;
+			plan_id = data.data[0].plans[0].id;
+			
+			$(".rincian-biaya").find("tr:last").before(`
+				<tr class="insurance-total">
+					<td>Asuransi (x${count_adult})</td>
+					<td>Rp</td><td class="to-local">${number_format(price_insurance, 0, '', '.')}</td>
+				</tr>
+			`)					
+			
+			$(".total").find("td:last").remove();
+			$(".total").append(`
+			<td>${number_format(total_insurance, 0, '', '.')}</td>
+			`)
+			}
+		}).done(function(resp, i){
+			var name = 'WebInsurance';
+			var product_id = `${resp.data[0].id}`;
+			var plan_id = `${resp.data[0].plans[0].id}`;
+			var total = `${resp.data[0].plans[0].price_pax}`
+			var dataInsurance = {
+				"is_insured" : 1,
+				'insurance_plan_id': `${resp.data[0].id}`,
+				'insurance_product_id': `${product_id}`,
+				"total" : total,
+			}				
+			localStorage.setItem(name, JSON.stringify(dataInsurance))			
+			});				
+	}
+	
+	function showData(click){
+		if (click.checked) {
+			ajax_test();			
+		} else {
+			$(".insurance-total").empty();
+			$(".total").find("td:last").remove();
+			$(".total").append(`
+			<td>${number_format(price_total, 0, '', '.')}</td>
+			`)
+			var empt = "";
+			localStorage.setItem("WebInsurance", empt);
+		}
+		
+	}
+	
+
+	function getInsurance(){
+		return new Promise (function(resolve){
+			$.ajax({
+				url: insurance,
+				method: 'GET',
+				success: function (resp){
+					
+					var productDescription = resp.data[0].description;
+					var pricePax = resp.data[0].plans[0].price_pax;
+					var nama = resp.data[0].plans[0].benefits;
+					var plan_id = resp.data[0].plans[0].id;
+					var product_id = resp.data[0].id;
+	
+					resolve({plan_id, product_id})
+					
+					var i;
+	
+					var insuranceHTML = '';
+					for (i=0; i<nama.length; i++) {
+						var a = nama[i];
+						insuranceHTML += `
+						<li>
+								<img src="${a.icon}"/>
+								<div class="text-desc">${a.description}</div>
+								</li>
+						`
+					}
+					
+					var header = `
+					<div class="square">
+					<div class="top">
+							<div class="flex">
+								<div class="left-insurance">
+									<span>${productDescription}</span>
+									<span class="orange" id="insurancePrice">${number_format(pricePax, 0, '', '.')}</span>
+										<span class="light">per orang</span>
+										</div>
+										<div class="right-insurance">
+									<label class="switch">
+									<input id="insuranceCheck" type="checkbox" onchange="showData(this)">
+									<span class="slider round"></span>
+									</label>
+									</div>
+									</div>
+						</div>
+						
+						<div class="content-insurance">
+						<ul>
+								${insuranceHTML}
+							</ul>
+							</div>
+					</div>
+					`
+					$(".insurance-wrapper").append(header)
+				},
+				error: function(resp) {
+					console.log("Error: ", resp);
+					
+				}
+			})
+		})
+	};
+
+	getInsurance();
+	
+	// end get insurance
+	
+</script>
