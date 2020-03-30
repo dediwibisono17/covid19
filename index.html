@@ -23,8 +23,8 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
-		var proxy = 'https://cors-anywhere.herokuapp.com/';
-		var url = 'https://api.kawalcovid19.id/case/summary';
+		var proxy = 'https://crossorigin.me/';
+		var url = 'http://api.kawalcovid19.id/case/summary';
 		$.ajax({
 			url: proxy + url,
 			type: 'GET',
@@ -128,7 +128,7 @@
 		}).done(function(resp){
 			console.log("resp:",resp);
 		}).fail(function(jqXHR, textStatus) { 
-		      console.error("textStatus",textStatus)
+		      console.log("textStatus",textStatus)
 		    })
 	</script>
 </body>
