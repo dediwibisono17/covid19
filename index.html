@@ -24,17 +24,16 @@
 	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
+		
 		var proxy = 'https://crossorigin.me/';
 		var url = 'http://api.kawalcovid19.id/case/summary';
+		var new_url = 'https://api.kawalcorona.com/indonesia/provinsi/';
 		$.ajax({
-			url: proxy + url,
+			url: new_url,
 			type: 'GET',
-			jsonp: "callback",
 			dataType: 'jsonp',
-			headers: {
-			"x-requested-with": "xhr" 
-		      },
 			success: function(response) {
+				console.log(response);
 				var timee = response.metadata.lastUpdatedAt;
 				var a = timee.substr(0,10);
 				var tanggal = a.substr(8,9);
