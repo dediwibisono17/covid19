@@ -23,10 +23,12 @@ h2 {
 }
 
 .card-action {
-  color: #000;
+  color: rgba(0,0,0,0.8);
   font-weight: bold;
   padding: 16px 24px 8px !important;
   padding: 0;
+  border-bottom: 1px solid #ececec;
+  background: rgba(242,242,242,0.5) !important;
 }
 
 h1 {
@@ -38,7 +40,7 @@ h1 {
 }
 
 .card .card-content {
-  padding: 0 24px 8px !important;
+  padding: 8px 24px 8px !important;
 }
 
 .background-round {
