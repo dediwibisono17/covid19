@@ -57,7 +57,7 @@ h1 {
 	font-weight: bold;
 }
 
-#waktu {
+#waktu, #txt {
 	font-size: 18px;
 	margin: 0 8px;
 }
@@ -89,4 +89,8 @@ h1 {
   direction: ltr;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+}
+
+.sumber {
+  margin: 24px 0;
 }
