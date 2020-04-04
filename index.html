@@ -8,10 +8,13 @@
 	<link rel="stylesheet" href="css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2&display=swap" rel="stylesheet">
 </head>
-<body>
+<body onload="startTime()">
 	<div class="container">
 		<h1 class="center-align">Data Covid-19 Indonesia</h1>
-		<div id="waktu"></div>
+		<div style="display: flex;justify-content: space-between;">
+			<div id="waktu"></div>
+			<div id="txt"></div>
+		</div>
 		<div id="data"></div>
 
 		<h1 class="center-align">Tren Penambahan kasus Per Hari</h1>
@@ -34,6 +37,25 @@
 	<script src="js/Chart.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
+
+		// time
+		function startTime() {
+		  var today = new Date();
+		  var h = today.getHours();
+		  var m = today.getMinutes();
+		  var s = today.getSeconds();
+		  m = checkTime(m);
+		  s = checkTime(s);
+		  document.getElementById('txt').innerHTML =
+		  h + ":" + m + ":" + s;
+		  var t = setTimeout(startTime, 500);
+		}
+		function checkTime(i) {
+		  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+		  return i;
+		}
+		// endtime
+
 		var url = 'https://api.kawalcorona.com/indonesia/';
 
 		var newDate = new Date();
@@ -70,6 +92,8 @@
 		var timeHighlight = `
 			<div>${hariWording[senin]}, ${getHari} ${monthWording[getBulan]} ${getTahun}</div>
 		`
+
+		$("#waktu").append(timeHighlight);
 
 
 		function totalCovid(){
@@ -128,12 +152,11 @@
 								</div>
 							</div>
 						`
-
-						$("#waktu").append(timeHighlight);
 						$("#data").append(style);
 						resolve({all_recover, all_positive, all_die})
 					},
 					error: function(resp){
+						$("#data, #provinsi, .center-align").hide();
 						$("body").append(`
 								<h1 style="text-align:center">Data tidak ditemukan</h1> 
 							`)
