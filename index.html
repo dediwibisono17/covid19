@@ -31,55 +31,45 @@
 		</div>
 	</div>
 	<script src="js/jquery-1.11.2.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+	<script src="js/Chart.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
 		var url = 'https://api.kawalcorona.com/indonesia/';
 
-			var newDate = new Date();
-			var senin = newDate.getDay();
-			var getHari = newDate.getDate();
-			var getBulan = newDate.getMonth() + 1;
-			var getTahun = newDate.getFullYear();
-				// var timee = response.metadata.lastUpdatedAt;
-				// var a = timee.substr(0,10);
-				// var tanggal = a.substr(8,9);
-				// var bulan = a.substr(5,2);
-				// var tahun = a.substr(0,4);
+		var newDate = new Date();
+		var senin = newDate.getDay();
+		var getHari = newDate.getDate();
+		var getBulan = newDate.getMonth() + 1;
+		var getTahun = newDate.getFullYear();
 
-			
-			 
+		var monthWording = {
+				'1':'Januari',
+				'2':'Februari',
+				'3':'Maret',
+				'4':'April',
+				'5':'Mei',
+				'6':'Juni',
+				'7':'Juli',
+				'8':'Agustus',
+				'9':'September',
+				'10':'Oktober',
+				'11':'November',
+				'12':'Desember',
+			}
 
-				var monthWording = {
-						'1':'Januari',
-						'2':'Februari',
-						'3':'Maret',
-						'4':'April',
-						'5':'Mei',
-						'6':'Juni',
-						'7':'Juli',
-						'8':'Agustus',
-						'9':'September',
-						'10':'Oktober',
-						'11':'November',
-						'12':'Desember',
-					}
+		var hariWording = {
+			'1' : 'Senin',
+			'2'	: 'Selasa',
+			'3' : 'Rabu',
+			'4' : 'Kamis',
+			'5' : 'Jumat',
+			'6' : 'Sabtu',
+			'7' : 'Minggu'
+		}
 
-				var hariWording = {
-					'1' : 'Senin',
-					'2'	: 'Selasa',
-					'3' : 'Rabu',
-					'4' : 'Kamis',
-					'5' : 'Jumat',
-					'6' : 'Sabtu',
-					'7' : 'Minggu'
-				}
-
-			console.log(hariWording[senin],getHari, getTahun, monthWording[getBulan])
-
-				var timeHighlight = `
-					<div>${hariWording[senin]}, ${getHari} ${monthWording[getBulan]} ${getTahun}</div>
-				`
+		var timeHighlight = `
+			<div>${hariWording[senin]}, ${getHari} ${monthWording[getBulan]} ${getTahun}</div>
+		`
 
 
 		function totalCovid(){
@@ -153,14 +143,6 @@
 			})
 		}
 
-
-
-		// totalCovid().then((resultCovid)=>{
-		// 	console.log(resultCovid)
-		// })
-
-		
-
 		$.ajax({
 			url: url + 'provinsi/',
 			type: 'GET',
@@ -171,9 +153,6 @@
 				var daerah="";
 				var a;
 				for (a=0; a<response.length; a++ ) {
-					// console.log(response[a].attributes.Kasus_Semb)
-					// console.log(response[a].attributes.Provinsi)
-					// console.log(response[a].attributes.Kasus_Meni)
 					var prov = response[a].attributes.Provinsi;
 					var sembuh = response[a].attributes.Kasus_Semb;
 					var positif = response[a].attributes.Kasus_Posi;
