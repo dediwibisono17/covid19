@@ -15,6 +15,9 @@
 			<div id="waktu"></div>
 			<div id="txt"></div>
 		</div>
+		<div id="loading" style="margin: 0 auto;display: block;text-align: center;">
+			<img src="img/loading.gif" alt="loading">
+		</div>
 		<div id="data"></div>
 
 		<h1 class="center-align">Tren Penambahan kasus Per Hari</h1>
@@ -95,12 +98,19 @@
 
 		$("#waktu").append(timeHighlight);
 
-
 		function totalCovid(){
 			return new Promise(function(resolve){
 				$.ajax({
 					url: url,
 					type: 'GET',
+					 beforeSend: function(){
+					     $("#loading").show();
+					     // console.log("loading")
+					   },
+					   complete: function(){
+					     $("#loading").hide();
+					     // console.log("selesai")
+					   },
 					success: function(response) {
 						var all_die = `${response[0].meninggal}`;
 						var all_positive = `${response[0].positif}`;
