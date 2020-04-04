@@ -9,14 +9,23 @@
 	<link href="https://fonts.googleapis.com/css?family=Baloo+Thambi+2&display=swap" rel="stylesheet">
 </head>
 <body onload="startTime()">
+	<div id="loading">
+		<div class="dedi">
+			<h2 class="center-align">Sedang menyiapkan data</h2>
+			<div class="gfs">
+				<div class="gfs-slider">
+					<div class="line"></div>
+					<div class="subline inc"></div>
+					<div class="subline dec"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<h1 class="center-align">Data Covid-19 Indonesia</h1>
 		<div style="display: flex;justify-content: space-between;">
 			<div id="waktu"></div>
 			<div id="txt"></div>
-		</div>
-		<div id="loading" style="margin: 0 auto;display: block;text-align: center;">
-			<img src="img/loading.gif" alt="loading">
 		</div>
 		<div id="data"></div>
 
@@ -104,12 +113,14 @@
 					url: url,
 					type: 'GET',
 					 beforeSend: function(){
+					 	$('body').addClass('opacity');
+					 	$('.container').hide();
 					     $("#loading").show();
-					     // console.log("loading")
 					   },
 					   complete: function(){
 					     $("#loading").hide();
-					     // console.log("selesai")
+					   	$('.container').show();
+					   	$('body').removeClass('opacity');
 					   },
 					success: function(response) {
 						var all_die = `${response[0].meninggal}`;
