@@ -14,10 +14,14 @@
 		<div id="waktu"></div>
 		<div id="data"></div>
 
+		<h1 class="center-align">Tren Penambahan kasus Per Hari</h1>
+		<canvas id="canvas"></canvas>
+
 		<h1 class="center-align">Data Provinsi</h1>
 		<div id="provinsi" class="row">
 			
 		</div>
+
 
 		<div class="sumber">
 			Sumber: 
@@ -27,20 +31,24 @@
 		</div>
 	</div>
 	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 	<script src="js/materialize.min.js"></script>
 	<script>
 		var url = 'https://api.kawalcorona.com/indonesia/';
 
-			var a = new Date();
-			var senin = a.getDay();
-			var getHari = a.getDate();
-			var getBulan = a.getMonth() + 1;
-			var getTahun = a.getFullYear();
+			var newDate = new Date();
+			var senin = newDate.getDay();
+			var getHari = newDate.getDate();
+			var getBulan = newDate.getMonth() + 1;
+			var getTahun = newDate.getFullYear();
 				// var timee = response.metadata.lastUpdatedAt;
 				// var a = timee.substr(0,10);
 				// var tanggal = a.substr(8,9);
 				// var bulan = a.substr(5,2);
 				// var tahun = a.substr(0,4);
+
+			
+			 
 
 				var monthWording = {
 						'1':'Januari',
@@ -56,7 +64,7 @@
 						'11':'November',
 						'12':'Desember',
 					}
-				
+
 				var hariWording = {
 					'1' : 'Senin',
 					'2'	: 'Selasa',
@@ -67,71 +75,89 @@
 					'7' : 'Minggu'
 				}
 
+			console.log(hariWording[senin],getHari, getTahun, monthWording[getBulan])
 
 				var timeHighlight = `
 					<div>${hariWording[senin]}, ${getHari} ${monthWording[getBulan]} ${getTahun}</div>
 				`
 
-		$.ajax({
-			url: url,
-			type: 'GET',
-			success: function(response) {
-				var style = `
-					<div class="row">
-						<div class="col s12 m6 l6 xl4">
-								<div class="blocking card gradient-green white-text">
-									<div class="row">
-										<div class="col s7 m7">
-											<i class="material-icons background-round mt-5">accessibility</i>
+
+		function totalCovid(){
+			return new Promise(function(resolve){
+				$.ajax({
+					url: url,
+					type: 'GET',
+					success: function(response) {
+						var all_die = `${response[0].meninggal}`;
+						var all_positive = `${response[0].positif}`;
+						var all_recover = `${response[0].sembuh}`;
+						var style = `
+							<div class="row">
+								<div class="col s12 m6 l6 xl4">
+										<div class="blocking card gradient-green white-text">
+											<div class="row">
+												<div class="col s7 m7">
+													<i class="material-icons background-round mt-5">accessibility</i>
+												</div>
+												
+												<div class="col s5 m5 right-align">
+													<h2>Sembuh</h2>
+													<div class="value">${response[0].sembuh}</div>
+												</div>
+											</div>
 										</div>
+									</div>
+								<div class="col s12 m6 l6 xl4">
+									<div class="blocking card gradient-cyan white-text">
 										
-										<div class="col s5 m5 right-align">
-											<h2>Sembuh</h2>
-											<div class="value">${response[0].sembuh}</div>
+										<div class="row">
+											<div class="col s7 m7">										
+												<i class="material-icons background-round mt-5">show_chart</i>
+											</div>
+											
+											<div class="col s5 m5 right-align">
+												<h2>Positif</h2>
+												<div class="value">${response[0].positif}</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col s12 m6 l6 xl4">
+									<div class="blocking card gradient-red white-text">
+										<div class="row">
+											<div class="col s7 m7">
+												<i class="material-icons background-round mt-5">warning</i>
+											</div>
+											
+											<div class="col s5 m5 right-align">
+												<h2>Meninggal</h2>
+												<div class="value">${response[0].meninggal}</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						<div class="col s12 m6 l6 xl4">
-							<div class="blocking card gradient-cyan white-text">
-								
-								<div class="row">
-									<div class="col s7 m7">										
-										<i class="material-icons background-round mt-5">show_chart</i>
-									</div>
-									
-									<div class="col s5 m5 right-align">
-										<h2>Positif</h2>
-										<div class="value">${response[0].positif}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col s12 m6 l6 xl4">
-							<div class="blocking card gradient-red white-text">
-								<div class="row">
-									<div class="col s7 m7">
-										<i class="material-icons background-round mt-5">warning</i>
-									</div>
-									
-									<div class="col s5 m5 right-align">
-										<h2>Meninggal</h2>
-										<div class="value">${response[0].meninggal}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				`
+						`
 
-				$("#waktu").append(timeHighlight);
-				$("#data").append(style);
-			},
-			error: function(resp){
-				console.log(resp)
-			}
+						$("#waktu").append(timeHighlight);
+						$("#data").append(style);
+						resolve({all_recover, all_positive, all_die})
+					},
+					error: function(resp){
+						$("body").append(`
+								<h1 style="text-align:center">Data tidak ditemukan</h1> 
+							`)
+					}
 
-		});
+				});	
+			})
+		}
+
+
+
+		// totalCovid().then((resultCovid)=>{
+		// 	console.log(resultCovid)
+		// })
 
 		
 
@@ -174,6 +200,80 @@
 				$("#provinsi").append(daerah);	
 			}
 		})
+
+
+		// return Promise
+		totalCovid().then((resultCovid)=>{
+			console.log(resultCovid)
+			// chart js
+			var ctx = document.getElementById('canvas').getContext('2d');
+
+			// function date
+			Date.prototype.AddDays = function(_this) {
+				    this.setTime(this.getTime() + (_this * (1000 * 60 * 60 * 24)));
+			    return this;
+			}
+
+			// Day - 1
+			var minOne = new Date().AddDays(-1);
+			var datetoString = minOne.toDateString();
+			var dayOne = datetoString.split(" ");
+			var getOneDay = dayOne[2];
+			var getOneMonth = dayOne[1];
+			var oneDay = `${getOneDay} ${getOneMonth}`
+
+			// Day -2
+			var minTwo = new Date().AddDays(-2);
+			var newDatetoString = minTwo.toDateString();
+			var dayTwo = newDatetoString.split(" ");
+			var getTwoDay = dayTwo[2];
+			var getTwoMonth = dayTwo[1];
+			var twoDay = `${getTwoDay} ${getTwoMonth}`
+
+			// Today
+			var thisDay = new Date();
+			var thisDatetoString = thisDay.toDateString();
+			var thisIs = thisDatetoString.split(" ");
+			var thisIsDay = thisIs[2];
+			var thisIsMonth = thisIs[1];
+			var thisIsDate = `${thisIsDay} ${thisIsMonth}`
+
+			var chart = new Chart(ctx, {
+			   type: 'line',
+			   data: {
+			      labels: [`${twoDay}`, `${oneDay}`, `${thisIsDate}`],
+			      datasets: [{
+			         label: 'Meninggal',
+			         data: [11, 13, 21],
+			         borderColor: 'rgba(255, 99, 132, 0.8)',
+			         fill: false
+			      }, {
+			         label: 'Sembuh',
+			         data: [22, 9, 22],
+			         borderColor: 'rgba(255, 206, 86, 0.8)',
+			         fill: false
+			      }, {
+			         label: 'Positif',
+			         data: [196, 113, 149],
+			         borderColor: 'rgba(54, 162, 235, 0.8)',
+			         fill: false
+			      }]
+			   },
+			   options: {
+			      tooltips: {
+			         mode: 'index',
+			         intersect: false
+			      },
+			      hover: {
+			         mode: 'index',
+			         intersect: false
+			      }
+			   }
+			});
+		})
+		
+		
+
 	</script>
 </body>
 </html>
