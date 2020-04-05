@@ -275,6 +275,30 @@
 			var getTwoMonth = dayTwo[1];
 			var twoDay = `${getTwoDay} ${getTwoMonth}`
 
+			// Day - 3
+			var minThree = new Date().AddDays(-3);
+			var datetoString = minThree.toDateString();
+			var dayThree = datetoString.split(" ");
+			var getThreeDay = dayThree[2];
+			var getThreeMonth = dayThree[1];
+			var ThreeDay = `${getThreeDay} ${getThreeMonth}`
+
+			// Day -4
+			var minFour = new Date().AddDays(-4);
+			var newDatetoString = minFour.toDateString();
+			var dayFour = newDatetoString.split(" ");
+			var getFourDay = dayFour[2];
+			var getFourMonth = dayFour[1];
+			var FourDay = `${getFourDay} ${getFourMonth}`
+
+			// Day - 5
+			var minFive = new Date().AddDays(-1);
+			var datetoString = minFive.toDateString();
+			var dayFive = datetoString.split(" ");
+			var getFiveDay = dayFive[2];
+			var getFiveMonth = dayFive[1];
+			var FiveDay = `${getFiveDay} ${getFiveMonth}`
+
 			// Today
 			var thisDay = new Date();
 			var thisDatetoString = thisDay.toDateString();
@@ -283,20 +307,6 @@
 			var thisIsMonth = thisIs[1];
 			var thisIsDate = `${thisIsDay} ${thisIsMonth}`
 
-
-			// coba kondisi besoknya
-			// time
-			// function startTime() {
-			//   var today = new Date();
-			//   var h = today.getHours();
-			//   var m = today.getMinutes();
-			//   var s = today.getSeconds();
-			//   m = checkTime(m);
-			//   s = checkTime(s);
-			//   document.getElementById('txt').innerHTML =
-			//   h + ":" + m + ":" + s;
-			//   var t = setTimeout(startTime, 500);
-			// }
 			function checkTime(i) {
 			  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
 			  return i;
@@ -312,20 +322,20 @@
 			var chart = new Chart(ctx, {
 			   type: 'line',
 			   data: {
-			      labels: [`02 Mar`,`${twoDay}`, `${oneDay}`, `${thisIsDate}`],
+			      labels: [`02 Mar`,`${FiveDay}`,`${FourDay}`, `${ThreeDay}`,`${twoDay}`, `${oneDay}`, `${thisIsDate}`],
 			      datasets: [{
 			         label: 'Meninggal',
-			         data: [2, 13, 10, 7],
+			         data: [2, 14, 21, 13, 11, 10, 7],
 			         borderColor: 'rgba(255, 99, 132, 0.8)',
 			         fill: false
 			      }, {
 			         label: 'Sembuh',
-			         data: [0, 9, 16, 14],
+			         data: [0, 6, 22, 9, 22, 16, 14],
 			         borderColor: 'rgba(255, 206, 86, 0.8)',
 			         fill: false
 			      }, {
 			         label: 'Positif',
-			         data: [0, 113, 106, 181],
+			         data: [0, 114, 149, 113, 196, 106, 181],
 			         borderColor: 'rgba(54, 162, 235, 0.8)',
 			         fill: false
 			      }]
