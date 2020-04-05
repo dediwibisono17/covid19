@@ -1,25 +1,25 @@
 .gradient-cyan {
-	background: linear-gradient(45deg,#0288d1,#26c6da)!important;
+  background: linear-gradient(45deg,#0288d1,#26c6da)!important;
 }
 .gradient-red {
-	background: linear-gradient(45deg,#ff5252,#f48fb1)!important;
+  background: linear-gradient(45deg,#ff5252,#f48fb1)!important;
 }
 .gradient-green {
-	background: linear-gradient(45deg,#43a047,#1de9b6)!important;
+  background: linear-gradient(45deg,#43a047,#1de9b6)!important;
 }
 .gradient-orange {
-	background: linear-gradient(45deg,#ff6f00,#ffca28)!important;
+  background: linear-gradient(45deg,#ff6f00,#ffca28)!important;
 }
 .blocking {
-	padding: 4% !important;
+  padding: 4% !important;
 }
 body {
-	font-family: 'Baloo Thambi 2', cursive;
+  font-family: 'Baloo Thambi 2', cursive;
 }
 h2 {
-	padding: 0;
-	margin: 0;
-	font-size: 18px;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
 }
 
 .card-action {
@@ -32,11 +32,11 @@ h2 {
 }
 
 h1 {
-	font-size: 32px;
+  font-size: 32px;
 }
 
 .container {
-	margin: 0 auto;
+  margin: 0 auto;
 }
 
 .card .card-content {
@@ -44,26 +44,26 @@ h1 {
 }
 
 .background-round {
-	padding: 15px;
+  padding: 15px;
     border-radius: 50%;
     background-color: rgba(0,0,0,.18);
 }
 
 .material-icons {
-	font-size: 24px;
+  font-size: 24px;
 }
 .value {
-	font-size: 40px;
-	font-weight: bold;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 #waktu, #txt {
-	font-size: 18px;
-	margin: 0 8px;
+  font-size: 18px;
+  margin: 0 8px;
 }
 
 .relative {
-	position: relative;
+  position: relative;
 }
 
 /* fallback */
@@ -100,14 +100,23 @@ h1 {
   height: 100vh;
 }
 
+
+ @media only screen and (max-device-width: 480px) {
+  .dedi {
+    position: absolute;top: 50%;left: 10%;right:10%;transform: translate(0%, -50%);
+  }
+}
+
+
+
 .dedi {
-  position: absolute;top: 50%;left: 10%;right:10%;transform: translate(0%, -50%);
+  position: absolute;top: 50%;left: 35%;right:35%;transform: translate(0%, -50%);
 }
 
 .gfs{position: relative;border: 1px solid transparent;margin: 24px auto;}
 .gfs-slider{position:absolute;width:100%;height:16px;overflow-x:hidden;border-radius:8px}
 .gfs-slider .line{position:absolute;background:#e9ebee;width:100%;height:16px;border-radius:8px}
-.gfs-slider .subline{position:absolute;border-radius:8px;background:#00e676;height:8px;top: 3px;}
+.gfs-slider .subline{position:absolute;border-radius:8px;background: linear-gradient(45deg,#43a047,#1de9b6)!important;height:8px;top: 3px;}
 .gfs-slider .inc{animation:increase 2s infinite}
 .gfs-slider .dec{animation:decrease 2s .5s infinite}
 .gfs-text {text-align: center;color: #1a2734;font-size: 16px;margin-top:32px}
