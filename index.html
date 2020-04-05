@@ -98,7 +98,7 @@
 			'4' : 'Kamis',
 			'5' : 'Jumat',
 			'6' : 'Sabtu',
-			'7' : 'Minggu'
+			'0' : 'Ahad'
 		}
 
 		var timeHighlight = `
@@ -264,6 +264,43 @@
 			var thisIsDay = thisIs[2];
 			var thisIsMonth = thisIs[1];
 			var thisIsDate = `${thisIsDay} ${thisIsMonth}`
+
+
+			// coba kondisi besoknya
+			// time
+			// function startTime() {
+			//   var today = new Date();
+			//   var h = today.getHours();
+			//   var m = today.getMinutes();
+			//   var s = today.getSeconds();
+			//   m = checkTime(m);
+			//   s = checkTime(s);
+			//   document.getElementById('txt').innerHTML =
+			//   h + ":" + m + ":" + s;
+			//   var t = setTimeout(startTime, 500);
+			// }
+			function checkTime(i) {
+			  if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
+			  return i;
+			}
+			// endtime
+
+			var check_hour = newDate.getHours();
+			var mi = newDate.getMinutes();
+			var se = newDate.getSeconds();
+			var check_minutes = checkTime(mi);
+			var check_seconds = checkTime(se);
+
+			console.log(check_hour, check_minutes, check_seconds)
+
+			if (check_hour == 20) {
+				var arr = [1,2,3,4,5,6];
+				var pu = arr.push(0);
+				var sl = arr.slice(1, arr.length-1);
+				console.log(sl)
+			}
+
+
 
 			var chart = new Chart(ctx, {
 			   type: 'line',
