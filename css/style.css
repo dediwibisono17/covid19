@@ -101,9 +101,9 @@ h1 {
 }
 
 
- @media only screen and (max-device-width: 480px) {
+ @media only screen and (max-device-width: 600px) {
   .dedi {
-    position: absolute;top: 50%;left: 10%;right:10%;transform: translate(0%, -50%);
+    position: absolute;top: 50%;left: 10% !important;right:10% !important;transform: translate(0%, -50%);
   }
 }
 
@@ -131,4 +131,10 @@ h1 {
     left: 10%;
     transform: translate(0%, -50%);
     right: 10%;
+}
+
+.small {
+  font-size: 14px;
+  margin-left: 8px;
+  /*font-weight: bold;*/
 }
