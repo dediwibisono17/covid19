@@ -97,10 +97,7 @@ $.ajax({
 
 
         $('#data').append(`
-            <div>${dates} Tanggal</div>
-            <div>${recovered} Sembuh</div>
-            <div>${active} Positif</div>
-            <div>${deaths} Meninggal</div>
+            
             <div class="row">
                 <div class="col s12 m6 l6 xl4">
                         <div class="blocking card gradient-green white-text">
