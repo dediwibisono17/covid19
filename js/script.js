@@ -83,15 +83,18 @@ $.ajax({
         var active = last_.Confirmed.toLocaleString('en');
         var dates = last_.Date.slice(0, 10);
 
-        var minOne = response[83].Confirmed;
+        var lastOne = response.length - 1;
+        var minOne = response[lastOne].Confirmed;
         var totalAct = last_.Confirmed;
         var totalActiveToday = totalAct - minOne;
 
-        var minOne_die = response[83].Deaths;
+        console.log(response.length);
+
+        var minOne_die = response[lastOne].Deaths;
         var totaldie = last_.Deaths;
         var totalDieToday = totaldie - minOne_die;
 
-        var minOne_Recovered = response[83].Recovered;
+        var minOne_Recovered = response[lastOne].Recovered;
         var totalRecovered = last_.Recovered;
         var totalRecoveredToday = totalRecovered - minOne_Recovered;
 
