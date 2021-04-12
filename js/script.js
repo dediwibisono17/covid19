@@ -153,5 +153,15 @@ $.ajax({
 
 
 
+    },
+     error: function(resp) {
+        $("#data, #provinsi, .center-align, #canvas, .sumber").hide();
+        $("body").append(`
+                <div class="center-align error-code">
+                    <i class="large material-icons">cloud_off</i>
+                    <h1 class="center-align">Data belum tersedia</h1>
+                    <p>Silahkan coba beberapa menit lagi</p>
+                </div> 
+            `)
     }
 });
